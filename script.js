@@ -6,6 +6,7 @@ $(document).ready(function () {
   var fahrenheitUnits = "&units=imperial";
   var lon = "";
   var lat = "";
+  var cityArray = [];
 
   $("#citySearch").on("click", function (event) {
     event.preventDefault();
@@ -28,7 +29,7 @@ $(document).ready(function () {
       url: cityQueryURL,
       method: "GET",
     }).then(function (response) {
-      //should be able to pull weather conditions, temperature in F, humidity, and windspeed - will need another ajax call that uses lon and lat to search for UV index
+      //creating variables to hold information from our response
       console.log("this is our response: ", response);
       lon = response.coord.lon;
       lat = response.coord.lat;
@@ -45,11 +46,45 @@ $(document).ready(function () {
       var humidity = response.main.humidity;
       var windSpeed = response.wind.speed;
       var cityTitle = city.toUpperCase() + " - " + todayDate;
-      $("#cityTitle").append(cityTitle);
-      $(".imageIcon").append(imgTag);
-      $("#temperature").append(" " + temp + " F");
-      $("#humidity").append(" " + humidity + "%");
-      $("#windspeed").append(" " + windSpeed + " mph");
+      // creating the main content card to display the variables stored above
+      var divCard = $("<div>");
+      divCard.addClass("card");
+      $("#mainContent").prepend(divCard);
+
+      var divCardBody = $("<div>");
+      divCardBody.addClass("card-body");
+      divCard.append(divCardBody);
+
+      var divTitleRow = $("<div>");
+      divTitleRow.addClass("titleRow");
+      divCardBody.append(divTitleRow);
+
+      var h5CardTitle = $("<h5>");
+      h5CardTitle.addClass("card-title");
+      h5CardTitle.attr("id", "cityTitle");
+      h5CardTitle.text(cityTitle);
+      divTitleRow.append(h5CardTitle);
+
+      var divImgTitle = $("<div>");
+      divImgTitle.addClass("imageIcon");
+      divImgTitle.append(imgTag);
+      divTitleRow.append(divImgTitle);
+
+      var pTemperature = $("<p>");
+      pTemperature.addClass("card-text");
+      pTemperature.text("Temperature: " + temp + " F");
+      divCardBody.append(pTemperature);
+
+      var pHumidity = $("<p>");
+      pHumidity.addClass("card-text");
+      pHumidity.text("Humidity: " + humidity + "%");
+      divCardBody.append(pHumidity);
+
+      var pWindspeed = $("<p>");
+      pWindspeed.addClass("card-text");
+      pWindspeed.text("Windspeed: " + windSpeed + " mph");
+      divCardBody.append(pWindspeed);
+
       console.log(
         "weather conditions: ",
         conditions,
@@ -62,15 +97,20 @@ $(document).ready(function () {
         "wind speed: ",
         windSpeed
       );
+
       getForecast();
+      var pUVindex = $("<p>");
+      pUVindex.addClass("card-text");
+      pUVindex.attr("id", "UV-index");
+      divCardBody.append(pUVindex);
 
-      var cityArray = [];
-      cityArray.push(localStorage.getItem("cityArray"));
-      cityArray.push(city);
-      localStorage.setItem("cityArray", cityArray);
+      // var cityArray = [];
+      // cityArray.push(localStorage.getItem("cityArray"));
+      // cityArray.push(city);
+      // localStorage.setItem("cityArray", cityArray);
 
-      var cities = localStorage.getItem("cityArray");
-      console.log("cities: ", cities);
+      // var cities = localStorage.getItem("cityArray");
+      // console.log("cities: ", cities);
     });
   }
 
@@ -138,9 +178,9 @@ $(document).ready(function () {
             $(divCardBody).append(humidityText);
           }
         });
-        var uvIndex = response.current.uvi;
+        uvIndex = response.current.uvi;
         console.log("uv index: ", uvIndex);
-        $("#UV-index").append(" " + uvIndex);
+        $("#UV-index").append("UV-Index: " + uvIndex);
       })
       .catch(console.error);
   }
