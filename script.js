@@ -6,11 +6,11 @@ $(document).ready(function () {
   var fahrenheitUnits = "&units=imperial";
   var lon = "";
   var lat = "";
-  var citySearches = [];
 
-  if (localStorage) {
-    var savedSearches = JSON.parse(localStorage.getItem("cities"));
-    $("#savedSearches").append(" " + savedSearches);
+  var savedSearches = JSON.parse(localStorage.getItem("cities")) || [];
+  for (var i = 0; i < savedSearches.length; i++) {
+    var liListSearches = $("<li>").text(savedSearches[i]);
+    $("#savedSearches").append(liListSearches);
   }
 
   $("#citySearch").on("click", function (event) {
@@ -19,10 +19,16 @@ $(document).ready(function () {
     var city = $("#inputCity").val().trim().toLowerCase();
     console.log("This is the city searched: ", city);
 
-    getCurrentWeather(city, fahrenheitUnits, apiKey);
+    getCurrentWeather(city);
   });
 
-  function getCurrentWeather(city, fahrenheitUnits, apiKey) {
+  $("#savedSearches").on("click", "li", function (event) {
+    var clickedLi = $(this).text();
+    console.log("clickedLi: ", clickedLi);
+    getCurrentWeather(clickedLi);
+  });
+
+  function getCurrentWeather(city) {
     var cityQueryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
       city +
@@ -31,10 +37,13 @@ $(document).ready(function () {
       apiKey;
     console.log("This will be the queryURL: ", cityQueryURL);
 
-    // create local storage to save as an array
-    citySearches.unshift(city);
-    localStorage.setItem("cities", JSON.stringify(citySearches));
-    console.log("citySearches: ", citySearches);
+    // check when you search and see if anywhere in index of saved searches - if its not already in the savedSearches array [-1] then it will push it into the array - .indexOf()
+    if (savedSearches.indexOf(city) === -1) {
+      savedSearches.unshift(city);
+      localStorage.setItem("cities", JSON.stringify(savedSearches));
+      var listSearches = $("<li>").text(city);
+      $("#savedSearches").prepend(listSearches);
+    }
 
     $.ajax({
       url: cityQueryURL,
@@ -131,6 +140,7 @@ $(document).ready(function () {
   }
 
   function getForecast() {
+    $("#cardContainer").empty();
     var uvQueryURL =
       "https://api.openweathermap.org/data/2.5/onecall?lat=" +
       lat +
