@@ -17,7 +17,7 @@
     <title>Weather App</title>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container">
       <div class="jumbotron">
         <h1 class="display-4">Weather Dashboard</h1>
         <p class="lead">
@@ -32,7 +32,7 @@
           <div class="form-group">
             <label for="inputCity">Search a City:</label>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-sm-2">
                 <input
                   type="text"
                   class="form-control"
@@ -40,14 +40,14 @@
                   placeholder="search"
                 />
               </div>
-              <div class="col-md-6">
+              <div class="col-sm-10">
                 <button id="citySearch" class="btn btn-primary">Search</button>
               </div>
             </div>
           </div>
         </form>
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-2">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Recent Searches:</h5>
@@ -55,7 +55,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-8">
+          <div class="col-sm-10 justify-content-center">
             <div class="card">
               <div class="card-body">
                 <div class="titleRow">
@@ -68,11 +68,11 @@
                 <p id="UV-index" class="card-text">UV-index:</p>
               </div>
             </div>
+            <div id="cardContainer" class="row justify-content-center">
+              <!-- <div class="col-md-2"> -->
+              <!-- </div> -->
+            </div>
           </div>
-        </div>
-        <div id="cardContainer" class="row">
-          <!-- <div class="col-md-2"> -->
-          <!-- </div> -->
         </div>
       </div>
     </div>

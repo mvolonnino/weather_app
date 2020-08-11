@@ -103,7 +103,7 @@ $(document).ready(function () {
 
             var divCard = $("<div>");
             divCard.addClass("card text-white bg-primary mb-3");
-            divCard.attr("style", "width:18rem");
+            divCard.attr("style", "width:10rem");
             $(divCol).append(divCard);
 
             var divCardTitle = $("<div>");
