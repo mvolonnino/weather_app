@@ -1,0 +1,9 @@
+.titleRow{
+  display: flex;
+  align-items: center;
+}
+
+.imageIcon{
+  margin-bottom: 15px;
+  
+}
