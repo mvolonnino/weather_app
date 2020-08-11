@@ -1,4 +1,4 @@
-Need to figure out local storage and have it print to page on recent searches
+Need to figure out local storage and have it print to page on recent searches - done
 
-empty out variables on button click - check project - 
+empty out variables on button click - check project - done
 
