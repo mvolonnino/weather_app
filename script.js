@@ -6,7 +6,12 @@ $(document).ready(function () {
   var fahrenheitUnits = "&units=imperial";
   var lon = "";
   var lat = "";
-  var cityArray = [];
+  var citySearches = [];
+
+  if (localStorage){
+    var savedSearches = localStorage.getItem("cities");
+  }
+  $("#savedSearches").localStorage.getItem("cities");
 
   $("#citySearch").on("click", function (event) {
     event.preventDefault();
@@ -25,6 +30,12 @@ $(document).ready(function () {
       "&appid=" +
       apiKey;
     console.log("This will be the queryURL: ", cityQueryURL);
+
+    // create local storage to save as an array
+    citySearches.unshift(city);
+    localStorage.setItem("cities", JSON.stringify(citySearches));
+    console.log("citySearches: ", citySearches);
+
     $.ajax({
       url: cityQueryURL,
       method: "GET",
@@ -46,44 +57,61 @@ $(document).ready(function () {
       var humidity = response.main.humidity;
       var windSpeed = response.wind.speed;
       var cityTitle = city.toUpperCase() + " - " + todayDate;
-      // creating the main content card to display the variables stored above
-      var divCard = $("<div>");
-      divCard.addClass("card");
-      $("#mainContent").prepend(divCard);
 
-      var divCardBody = $("<div>");
-      divCardBody.addClass("card-body");
-      divCard.append(divCardBody);
+      function renderMainContent() {
+        $("#mainContent").empty();
+        // creating the main content card to display the variables stored above
+        var divCard = $("<div>");
+        divCard.addClass("card");
+        $("#mainContent").prepend(divCard);
 
-      var divTitleRow = $("<div>");
-      divTitleRow.addClass("titleRow");
-      divCardBody.append(divTitleRow);
+        var divCardBody = $("<div>");
+        divCardBody.addClass("card-body");
+        divCard.append(divCardBody);
 
-      var h5CardTitle = $("<h5>");
-      h5CardTitle.addClass("card-title");
-      h5CardTitle.attr("id", "cityTitle");
-      h5CardTitle.text(cityTitle);
-      divTitleRow.append(h5CardTitle);
+        var divTitleRow = $("<div>");
+        divTitleRow.addClass("titleRow");
+        divCardBody.append(divTitleRow);
 
-      var divImgTitle = $("<div>");
-      divImgTitle.addClass("imageIcon");
-      divImgTitle.append(imgTag);
-      divTitleRow.append(divImgTitle);
+        var h5CardTitle = $("<h5>");
+        h5CardTitle.addClass("card-title");
+        h5CardTitle.attr("id", "cityTitle");
+        h5CardTitle.text(cityTitle);
+        divTitleRow.append(h5CardTitle);
 
-      var pTemperature = $("<p>");
-      pTemperature.addClass("card-text");
-      pTemperature.text("Temperature: " + temp + " F");
-      divCardBody.append(pTemperature);
+        var divImgTitle = $("<div>");
+        divImgTitle.addClass("imageIcon");
+        divImgTitle.append(imgTag);
+        divTitleRow.append(divImgTitle);
 
-      var pHumidity = $("<p>");
-      pHumidity.addClass("card-text");
-      pHumidity.text("Humidity: " + humidity + "%");
-      divCardBody.append(pHumidity);
+        var pTemperature = $("<p>");
+        pTemperature.addClass("card-text");
+        pTemperature.text("Temperature: " + temp + " F");
+        console.log("temp: ", temp);
+        divCardBody.append(pTemperature);
 
-      var pWindspeed = $("<p>");
-      pWindspeed.addClass("card-text");
-      pWindspeed.text("Windspeed: " + windSpeed + " mph");
-      divCardBody.append(pWindspeed);
+        var pHumidity = $("<p>");
+        pHumidity.addClass("card-text");
+        pHumidity.text("Humidity: " + humidity + "%");
+        divCardBody.append(pHumidity);
+
+        var pWindspeed = $("<p>");
+        pWindspeed.addClass("card-text");
+        pWindspeed.text("Windspeed: " + windSpeed + " mph");
+        divCardBody.append(pWindspeed);
+
+        var pUVindex = $("<p>");
+        pUVindex.addClass("card-text");
+        pUVindex.attr("id", "UV-index");
+        divCardBody.append(pUVindex);
+
+        // create the mini cards
+        var divRow = $("<div>");
+        divRow.addClass("row justifiy-content-center");
+        divRow.attr("id", "cardContainer");
+        $("#mainContent").append(divRow);
+      }
+      renderMainContent();
 
       console.log(
         "weather conditions: ",
@@ -99,18 +127,6 @@ $(document).ready(function () {
       );
 
       getForecast();
-      var pUVindex = $("<p>");
-      pUVindex.addClass("card-text");
-      pUVindex.attr("id", "UV-index");
-      divCardBody.append(pUVindex);
-
-      // var cityArray = [];
-      // cityArray.push(localStorage.getItem("cityArray"));
-      // cityArray.push(city);
-      // localStorage.setItem("cityArray", cityArray);
-
-      // var cities = localStorage.getItem("cityArray");
-      // console.log("cities: ", cities);
     });
   }
 
@@ -178,7 +194,7 @@ $(document).ready(function () {
             $(divCardBody).append(humidityText);
           }
         });
-        uvIndex = response.current.uvi;
+        var uvIndex = response.current.uvi;
         console.log("uv index: ", uvIndex);
         $("#UV-index").append("UV-Index: " + uvIndex);
       })

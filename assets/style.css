@@ -1,9 +1,12 @@
-.titleRow{
+.titleRow {
   display: flex;
   align-items: center;
 }
 
-.imageIcon{
+.imageIcon {
   margin-bottom: 15px;
-  
+}
+
+.row {
+  margin-left: -10px;
 }
