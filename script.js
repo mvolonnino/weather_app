@@ -8,10 +8,10 @@ $(document).ready(function () {
   var lat = "";
   var citySearches = [];
 
-  if (localStorage){
-    var savedSearches = localStorage.getItem("cities");
+  if (localStorage) {
+    var savedSearches = JSON.parse(localStorage.getItem("cities"));
+    $("#savedSearches").append(" " + savedSearches);
   }
-  $("#savedSearches").localStorage.getItem("cities");
 
   $("#citySearch").on("click", function (event) {
     event.preventDefault();
